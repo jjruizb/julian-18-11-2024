@@ -1,0 +1,33 @@
+version: '3.9'
+
+services:
+  # Servicio 1: Portal web
+  servicio1:
+    build:
+      context: . # Ruta del Dockerfile
+      dockerfile: Dockerfile
+    ports:
+      - "8087:80" # Publicar el puerto externo especificado
+    volumes:
+      - /datadrive/data # Montar un volumen
+    networks:
+      - app-networks # Conectar a la red definida
+    restart: always
+
+  # Servicio 2: Base de datos MySQL
+  servicio2:
+    image: mysql:latest
+    ports:
+      - "3306:3306" # Puerto de MySQL
+    environment:
+      MYSQL_ROOT_PASSWORD: "redes2024"
+      MYSQL_DATABASE: "examen"
+      MYSQL_USER: "user"
+      MYSQL_PASSWORD: "redes2024"
+    networks:
+      - app-networks # Conectar a la misma red que el servicio1
+    restart: always
+
+networks:
+  app-networks:
+    driver: bridge
